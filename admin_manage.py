@@ -73,32 +73,55 @@ def chkin_cus():
     chkin.grid(row="3",column="0")
     hide2.grid(row="3",column="1")
     
-def del_final():# change customer status from BOOKED TO CHECKED-IN 
+def del_final():# change customer status from BOOKED TO CHECKED-IN
     cur=dbconn.cursor()
-    now = datetime.datetime.now()
-    print(now.strftime("%H:%M:%S"),cus_chk_in.get())
-    '''
-    sql="update customer set status='CHECKED-IN',check_in_time='{}' where fname='{}' and mob_no={}".format(now.strftime("%H:%M:%S"),cus_chk_in.get(),chkin_mob.get())
+    cur2=dbconn.cursor()
+    sql="select * from customer where fname='{}' and mob_no={} and status='BOOKED'".format(cus_chk_in.get(),chkin_mob.get())
     cur.execute(sql)
-    sql2="insert into customer_counts values('{}')".format(cus_chk_in.get())
+    result=cur.fetchall()
+    sql2="select * from customer where fname='{}' and mob_no={} and status='CHECKED-IN'".format(cus_chk_in.get(),chkin_mob.get())
     cur.execute(sql2)
-    '''
-    rate="select rate,type from customer where fname='{}' and mob_no={}".format(cus_chk_in.get(),chkin_mob.get())
-    cur.execute(rate)
-    rate=cur.fetchall()
-    types=str(rate[0][1])
-    rates=str(rate[0][0])
-    if(types=='AC' and rates=='0'):
-        sql3="update customer set rate=5000,status='CHECKED-IN' where fname='{}' and mob_no='{}'".format(cus_chk_in.get(),chkin_mob.get())
-        cur.execute(sql3)
-    elif(types=='NON_AC' and rates=='0'):
-        sql3="update customer set rate=2500,status='CHECKED-IN' where fname='{}' and mob_no='{}'".format(cus_chk_in.get(),chkin_mob.get())
-        cur.execute(sql3)
-    try:
+    result2=cur.fetchall()
+    if(bool(result)==True and bool(result2)==False):
+        now = datetime.datetime.now()
+        print(now.strftime("%H:%M:%S"),cus_chk_in.get())
+        sql="update customer set status='CHECKED-IN',check_in_time='{}' where fname='{}' and mob_no={}".format(now.strftime("%H:%M:%S"),cus_chk_in.get(),chkin_mob.get()) 
+        cur.execute(sql)
+        sql2="insert into customer_counts values('{}')".format(cus_chk_in.get())
+        cur.execute(sql2)
+        room="select room_no,type from customer where fname='{}' and mob_no={}".format(cus_chk_in.get(),chkin_mob.get())
+        cur.execute(room)
+        room=list(cur.fetchall())
+        typess=str(room[0][1])
+        room=room[0][0]
+        if(typess=='AC'):
+            sqla="delete from ac_room where AC={}".format(room)
+            cur.execute(sqla)
+        elif(typess=='NON-AC'):
+            sqla="delete from non_ac_room where non_ac={}".format(room)
+            cur.execute(sqla)
         dbconn.commit()
-        showinfo('Success','Record Updated Successfully')
-    except Exception as e:
-        print(e)
+        rate="select rate,type from customer where fname='{}' and mob_no={}".format(cus_chk_in.get(),chkin_mob.get())
+        cur.execute(rate)
+        rate=cur.fetchall()
+        types=str(rate[0][1])
+        rates=str(rate[0][0])
+        if(types=='AC' and rates=='0'):
+            sql3="update customer set rate=5000,where fname='{}' and mob_no='{}'".format(cus_chk_in.get(),chkin_mob.get())
+            cur.execute(sql3)
+        elif(types=='NON_AC' and rates=='0'):
+            sql3="update customer set rate=2500,where fname='{}' and mob_no='{}'".format(cus_chk_in.get(),chkin_mob.get())
+            cur.execute(sql3)
+        try:
+            dbconn.commit()
+            showinfo('Success','Record Updated Successfully')
+        except Exception as e:
+            print(e)
+    elif(bool(result)==False and bool(result2)==False):
+        showerror('Failure','Customer Not Found')
+    elif(bool(result)==False and bool(result2)==True):
+        showerror('Failure','Customer Already Checked-In')
+    
 def emp_data():# to open emplloyee manage program
     win.destroy()
     from subprocess import Popen
