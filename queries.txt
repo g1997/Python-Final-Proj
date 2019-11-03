@@ -1,0 +1,112 @@
+
+MariaDB [hotelmgmtsys]> show tables;
++------------------------+
+| Tables_in_hotelmgmtsys |
++------------------------+
+| ac_room                |
+| admin                  |
+| customer               |
+| customer_counts        |
+| customer_order         |
+| employee               |
+| non_ac_room            |
+| owner_login            |
++------------------------+
+8 rows in set (0.001 sec)
+ 
+ 
+ 
+ table customer
+ 
+ customer | CREATE TABLE `customer` (
+  `fname` varchar(40) NOT NULL,
+  `lname` varchar(40) NOT NULL,
+  `age` int(10) NOT NULL,
+  `mob_no` varchar(50) DEFAULT NULL,
+  `chk_in_day` int(11) NOT NULL,
+  `chk_in_month` int(11) NOT NULL,
+  `chk_in_year` int(11) NOT NULL,
+  `chk_out_day` int(11) NOT NULL,
+  `chk_out_month` int(11) NOT NULL,
+  `chk_out_year` int(11) NOT NULL,
+  `type` varchar(10) DEFAULT NULL,
+  `check_in_time` varchar(30) DEFAULT NULL,
+  `room_no` int(20) DEFAULT NULL,
+  `rate` int(20) DEFAULT NULL,
+  `status` varchar(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf16 |
+
+table employee
+| employee | CREATE TABLE `employee` (
+  `Emp_ID` varchar(30) NOT NULL,
+  `E_fname` varchar(20) NOT NULL,
+  `E_lname` varchar(20) NOT NULL,
+  `DOB` varchar(20) NOT NULL,
+  `Designation` varchar(30) NOT NULL,
+  `Salary` int(30) NOT NULL,
+  PRIMARY KEY (`Emp_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf16 |
++----------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.024 sec)
+
+admin table
+| admin | CREATE TABLE `admin` (
+  `id` varchar(30) NOT NULL,
+  `pwd` varchar(30) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf16 |
++-------+------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.000 sec)
+
+ac_room table
++---------+----------------------------------------------------------------------------------------+
+| Table   | Create Table                                                                           |
++---------+----------------------------------------------------------------------------------------+
+| ac_room | CREATE TABLE `ac_room` (
+  `AC` int(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf16 |
++---------+----------------------------------------------------------------------------------------+
+1 row in set (0.000 sec)
+
+non_ac_room table
+| Table       | Create Table                                                                                   |
++-------------+------------------------------------------------------------------------------------------------+
+| non_ac_room | CREATE TABLE `non_ac_room` (
+  `non_ac` int(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf16 |
++-------------+------------------------------------------------------------------------------------------------+
+1 row in set (0.000 sec)
+
+customer_order table
++----------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Table          | Create Table                                                                                                                                                                                                                                            |
++----------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| customer_order | CREATE TABLE `customer_order` (
+  `fname` varchar(50) DEFAULT NULL,
+  `room_no` int(11) DEFAULT NULL,
+  `orders` varchar(50) DEFAULT NULL,
+  `quantity` int(40) DEFAULT NULL,
+  `price` decimal(7,2) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf16 |
++----------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.000 sec)
+
+owner_login table
++-------------+------------------------------------------------------------------------------------------------------------------------------+
+| Table       | Create Table                                                                                                                 |
++-------------+------------------------------------------------------------------------------------------------------------------------------+
+| owner_login | CREATE TABLE `owner_login` (
+  `id` varchar(30) NOT NULL,
+  `pwd` varchar(40) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf16 |
++-------------+------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.000 sec)
+
+customer_counts table
++-----------------+-----------------------------------------------------------------------------------------------------------+
+| Table           | Create Table                                                                                              |
++-----------------+-----------------------------------------------------------------------------------------------------------+
+| customer_counts | CREATE TABLE `customer_counts` (
+  `fname` varchar(40) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf16 |
++-----------------+-----------------------------------------------------------------------------------------------------------+
+1 row in set (0.000 sec)
