@@ -1,4 +1,5 @@
 from os import system
+import tkinter as tk
 import datetime
 from datetime import date
 from datetime import timedelta 
@@ -11,8 +12,8 @@ import random
 import mysql.connector as conn
 AC=list()
 NON_AC=list()
-Ac_rate=2500
-Non_ac_rate=1500
+Ac_rate=5000
+Non_ac_rate=2500
 result=list()
 res=list()
 dbconn=conn.connect(host="localhost",
@@ -40,9 +41,6 @@ def allot_ac():# to allot ac room to customer
                     print(fnametxt.get(),lnametxt.get(),agetxt.get(),mobiletxt.get(),int(day.get()),int(month.get()),int(year.get()),int(day2.get()),int(month2.get()),int(year2.get()),int(allottxt.get()),rate_ac)
                     sql="insert into  customer values('{}','{}',{},{},{},{},{},{},{},{},'AC','NA',{},{},'BOOKED')".format(fnametxt.get(),lnametxt.get(),agetxt.get(),mobiletxt.get(),int(day.get()),int(month.get()),int(year.get()),int(day2.get()),int(month2.get()),int(year2.get()),int(allottxt.get()),rate_ac)
                     cur.execute(sql)
-                    sql2="delete from ac_room where AC={}".format(allottxt.get())
-                    cur2.execute(sql2)
-                    dbconn.commit()
                     if cur.rowcount>0 and cur2.rowcount>0:
                         showinfo(title="Success",message="Record Added")
                         win1.destroy()
@@ -86,7 +84,89 @@ def allot_nonac(): # to allot non_ac room to customer
                     showerror(title="Failure",message="Failed to Add record")
             else:
                 showerror(title="Failure",message="Room Not Available")
-                
+
+def viewtable_ac():
+    win1=Toplevel(win)
+    win1["bg"]="sky blue"
+    win1.geometry("800x300-100+100")
+    tree = ttk.Treeview(win1)
+    tree.pack(side=TOP)
+    scrollbar_horizontal = ttk.Scrollbar(win1, orient='horizontal', command = tree.xview)    
+    scrollbar_vertical = ttk.Scrollbar(win1, orient='vertical', command = tree.yview)   
+    scrollbar_horizontal.pack(side='bottom', fill=X)    
+    scrollbar_vertical.pack(side='right', fill=Y)
+    tree.configure(xscrollcommand=scrollbar_horizontal.set, yscrollcommand=scrollbar_vertical.set)
+    tree["columns"]=('fname','lname','chk_in_day','month','year','chk_out_day','out_month','out_year','chk_in_time','room_no','status')
+    tree.column("fname", width=90)
+    tree.column("lname", width=90 )
+    tree.column("chk_in_day", width=90 )
+    tree.column("month", width=90 )
+    tree.column("year", width=90 )
+    tree.column("chk_out_day", width=90 )
+    tree.column("out_month", width=90 )
+    tree.column("out_year", width=90 )
+    tree.column("chk_in_time", width=90)
+    tree.column("room_no", width=90 )
+    tree.column("status", width=90)
+    tree.heading("fname", text="FIRST NAME")
+    tree.heading("lname", text="LAST NAME")
+    tree.heading("chk_in_day", text="CHECK IN DAY" )
+    tree.heading("month", text="CHECK_IN_MONTH" )
+    tree.heading("year", text="CHECK_IN_YEAR" )
+    tree.heading("chk_out_day", text="CHEK_OUT_DAY" )
+    tree.heading("out_month", text="CHECK_OUT_MONTH" )
+    tree.heading("out_year", text="CHECK_OUT_YEAR" )
+    tree.heading("chk_in_time", text="CHECK_N_TIME")
+    tree.heading("room_no", text="Room Number" )
+    tree.heading("status", text="STATUS" )
+    cur=dbconn.cursor()
+    sql=" select fname,lname,chk_in_day,chk_in_month,chk_in_year,chk_out_day,chk_out_month,chk_out_year,check_in_time,room_no,status from customer where type='AC'"
+    cur.execute(sql)
+    data=cur.fetchall()
+    for i in data:
+        tree.insert("", tk.END, values=i)
+    win1.mainloop()
+def viewtable_nonac():
+    win1=Toplevel(win)
+    win1["bg"]="sky blue"
+    win1.geometry("800x300-100+100")
+    tree = ttk.Treeview(win1)
+    tree.pack(side=TOP)
+    scrollbar_horizontal = ttk.Scrollbar(win1, orient='horizontal', command = tree.xview)    
+    scrollbar_vertical = ttk.Scrollbar(win1, orient='vertical', command = tree.yview)   
+    scrollbar_horizontal.pack(side='bottom', fill=X)    
+    scrollbar_vertical.pack(side='right', fill=Y)
+    tree.configure(xscrollcommand=scrollbar_horizontal.set, yscrollcommand=scrollbar_vertical.set)
+    tree["columns"]=('fname','lname','chk_in_day','month','year','chk_out_day','out_month','out_year','chk_in_time','room_no','status')
+    tree.column("fname", width=90)
+    tree.column("lname", width=90 )
+    tree.column("chk_in_day", width=90 )
+    tree.column("month", width=90 )
+    tree.column("year", width=90 )
+    tree.column("chk_out_day", width=90 )
+    tree.column("out_month", width=90 )
+    tree.column("out_year", width=90 )
+    tree.column("chk_in_time", width=90)
+    tree.column("room_no", width=90 )
+    tree.column("status", width=90)
+    tree.heading("fname", text="FIRST NAME")
+    tree.heading("lname", text="LAST NAME")
+    tree.heading("chk_in_day", text="CHECK IN DAY" )
+    tree.heading("month", text="CHECK_IN_MONTH" )
+    tree.heading("year", text="CHECK_IN_YEAR" )
+    tree.heading("chk_out_day", text="CHEK_OUT_DAY" )
+    tree.heading("out_month", text="CHECK_OUT_MONTH" )
+    tree.heading("out_year", text="CHECK_OUT_YEAR" )
+    tree.heading("chk_in_time", text="CHECK_N_TIME")
+    tree.heading("room_no", text="Room Number" )
+    tree.heading("status", text="STATUS" )
+    cur=dbconn.cursor()
+    sql=" select fname,lname,chk_in_day,chk_in_month,chk_in_year,chk_out_day,chk_out_month,chk_out_year,check_in_time,room_no,status from customer where type='NON-AC'"
+    cur.execute(sql)
+    data=cur.fetchall()
+    for i in data:
+        tree.insert("", tk.END, values=i)
+    
 def validate(val): #to check available ac and non-ac rooms 
     if(val==1):
         win1.title("Allot Rooms")
@@ -96,14 +176,14 @@ def validate(val): #to check available ac and non-ac rooms
         sql="select * from ac_room"
         cur.execute(sql)
         result=list(cur.fetchall())
-        sql2="select room_no from customer where type='AC'"
+        sql2="select room_no from customer where type='AC' and status='CHECKED-IN'"
         cur.execute(sql2)
         result2=list(cur.fetchall())
         res=Label(win1,bg="lawn green",text="Avalable AC Rooms:  ",font=("arial black",15))
         resultLabel = Label(win1,bg="lawn green",text =result,font=("arial black",15))
         res.grid(row="1",column="0")
         resultLabel.grid(row="1",column="1")
-        res2=Label(win1,bg="red2",text="Booked Rooms:  ",font=("arial black",15))
+        res2=Label(win1,bg="red2",text="Checked-In Rooms:  ",font=("arial black",15))
         resultLabel2= Label(win1,bg="red2",text =result2,font=("arial black",15))
         res2.grid(row="2",column="0")
         resultLabel2.grid(row="2",column="1")
@@ -112,6 +192,8 @@ def validate(val): #to check available ac and non-ac rooms
         allottxt.grid(row="3",column="1")
         alt=Button(win1,text="Allot Room",bg="lightcyan2",fg="black",bd=7,command=allot_ac,font=("Cooper Black",15))
         alt.grid(row="4",column="0")
+        view_table=Button(win1,text="View Ac table",bg="lightcyan2",fg="black",bd=7,command=viewtable_ac,font=("Cooper Black",15))
+        view_table.grid(row="4",column="1")
         win.mainloop()
     elif(val==2):
         win1.title("Allot Rooms")
@@ -121,14 +203,14 @@ def validate(val): #to check available ac and non-ac rooms
         sql="select * from non_ac_room"
         cur.execute(sql)
         result=list(cur.fetchall())
-        sql2="select room_no from customer where type='NON-AC'"
+        sql2="select room_no from customer where type='NON-AC' and status='CHECKED-IN'"
         cur.execute(sql2)
         result2=list(cur.fetchall())
         res=Label(win1,bg="lawn Green",text="Avalable NON-AC Rooms:  ",font=("arial black",15))
         resultLabel = Label(win1,bg="lawn green",text=result,font=("arial black",15))
         res.grid(row="1",column="0")
         resultLabel.grid(row="1",column="1")
-        res2=Label(win1,bg="red2",text="Booked  Rooms:  ",font=("arial black",15))
+        res2=Label(win1,bg="red2",text="Checked-In Rooms:  ",font=("arial black",15))
         resultLabel2 = Label(win1,bg="red2",text=result2,font=("arial black",15))
         res2.grid(row="2",column="0")
         resultLabel2.grid(row="2",column="1")
@@ -137,15 +219,15 @@ def validate(val): #to check available ac and non-ac rooms
         allottxt.grid(row="3",column="1")
         alt_nac=Button(win1,text="Allot Room",bg="lightcyan2",fg="black",bd=7,command=allot_nonac,font=("Cooper Black",15))
         alt_nac.grid(row="4",column="0")
+        view_table=Button(win1,text="View Non-Ac table",bg="lightcyan2",fg="black",bd=7,command=viewtable_nonac,font=("Cooper Black",15))
+        view_table.grid(row="4",column="1")
         win1.mainloop()
         win.mainloop()
 def book(): # to book room
     try:
-        '''
         if(int(agetxt.get())<18):
             showerror(title="Failure",message="Must be greater than 18 to book")
             return
-        '''
         if(fnametxt.get()=="" or lnametxt.get()==""):
             showerror(title="Failure",message="Name field cannot be left blank")
             return
