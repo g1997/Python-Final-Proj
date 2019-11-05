@@ -43,11 +43,11 @@ def obtain():
     sql4="select count(fname) from customer where status='BOOKED'"
     cur.execute(sql4)
     data=cur.fetchall()
-    listbox.insert(END,"Rooms Booked : ",data)
+    listbox.insert(END,"Rooms Currently Booked : ",data)
     sql4="select count(fname) from customer where status='CHECKED-IN'"
     cur.execute(sql4)
     data=cur.fetchall()
-    listbox.insert(END,"Rooms Checked-In : ",data)
+    listbox.insert(END,"Rooms Currently Checked-In : ",data)
 def cus_data():
     win1=Toplevel(win)
     win1["bg"]="blue"
