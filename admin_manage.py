@@ -106,22 +106,21 @@ def del_final():# change customer status from BOOKED TO CHECKED-IN
         rate=cur.fetchall()
         types=str(rate[0][1])
         rates=str(rate[0][0])
+        print(rates)
         if(types=='AC' and rates=='0'):
-            sql3="update customer set rate=5000,where fname='{}' and mob_no='{}'".format(cus_chk_in.get(),chkin_mob.get())
+            sql3="update customer set rate=5000 where fname='{}' and mob_no='{}'".format(cus_chk_in.get(),chkin_mob.get())
             cur.execute(sql3)
         elif(types=='NON_AC' and rates=='0'):
-            sql3="update customer set rate=2500,where fname='{}' and mob_no='{}'".format(cus_chk_in.get(),chkin_mob.get())
+            sql3="update customer set rate=2500 where fname='{}' and mob_no='{}'".format(cus_chk_in.get(),chkin_mob.get())
             cur.execute(sql3)
-        try:
-            dbconn.commit()
-            showinfo('Success','Record Updated Successfully')
-        except Exception as e:
-            print(e)
+        dbconn.commit()
+        showinfo('Success','Record Updated Successfully')
+
+     
     elif(bool(result)==False and bool(result2)==False):
         showerror('Failure','Customer Not Found')
     elif(bool(result)==False and bool(result2)==True):
         showerror('Failure','Customer Already Checked-In')
-    
 def emp_data():# to open emplloyee manage program
     win.destroy()
     from subprocess import Popen
@@ -268,7 +267,7 @@ def bill_gen_final():# generate final bill in txt format
     rates=cur.fetchall()
     rates=str(rates[0][0])
     rates=float(rates)
-    final_bill=(rates+total_price)*1.8
+    final_bill=(rates+total_price)*1.18
     for i in orders:
         data2.append(list(i))
     for i in quantities:
